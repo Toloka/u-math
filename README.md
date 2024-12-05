@@ -8,7 +8,7 @@ U-MATH provides a set of 1,100 university-level mathematical problems, while µ-
 
 * 📊 [U-MATH benchmark at Huggingface](https://huggingface.co/datasets/toloka/umath)
 * 🔎 [μ-MATH benchmark at Huggingface](https://huggingface.co/datasets/toloka/mumath)
-* 🗞️ [Paper](LINK)
+* 🗞️ [Paper](https://arxiv.org/abs/2412.03205)
 * 👾 [Evaluation Code at GitHub](https://github.com/Toloka/u-math/)
 
 ### U-MATH Evaluation Results
