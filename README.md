@@ -38,7 +38,7 @@ U-MATH provides a set of 1,100 university-level mathematical problems, while µ-
 This repository provides scripts for solving and evaluating the U-MATH and μ-MATH datasets.
 
 File Structure
-* `solve_u_math.py`: Script to generate solutions for U-MATH problems using a OpenAI-compatible endpoint (e.g. gpt-4o or VLLM).
+* `solve_u_math.py`: Script to generate solutions for U-MATH problems using an OpenAI-compatible endpoint (e.g. gpt-4o or VLLM).
 * `judge_u_math.py`: Script to evaluate the correctness of U-MATH solutions.
 * `judge_mu_math.py`: Script to evaluate the quality of LLM judgments for μ-MATH solutions.
 * `README.md`: This file.
@@ -74,8 +74,8 @@ python judge_u_math.py --base_url <BASE_URL> --api_key <YOUR_API_KEY> --model <M
 ```
 
 ### Licensing Information
-* The contents of the machine-generated `model_output` column are subject to the underlying LLMs' licensing terms.
-* Contents of all the other dataset fields and code are available under the MIT license.
+* The contents of the μ-MATH's machine-generated `model_output` column are subject to the underlying LLMs' licensing terms.
+* Contents of all the other dataset U-MATH and μ-MATH fields, as well as the code, are available under the MIT license.
 
 ### Citation
 If you use U-MATH or μ-MATH in your research, please cite the paper:
