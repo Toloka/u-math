@@ -47,7 +47,7 @@ def main():
     args = parser.parse_args()
 
     # Load the dataset
-    dataset = load_dataset("toloka/u-math")
+    dataset = load_dataset("toloka/u-math", split="test")
 
     # Load predictions
     with open(args.predictions_file, "r") as f:

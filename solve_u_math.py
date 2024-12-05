@@ -40,7 +40,7 @@ def main():
     args = parser.parse_args()
 
     # Load the dataset
-    dataset = load_dataset("toloka/u-math")
+    dataset = load_dataset("toloka/u-math", split="test")
 
     # Make openai client
     client = OpenAI(api_key=args.api_key, base_url=args.base_url)
