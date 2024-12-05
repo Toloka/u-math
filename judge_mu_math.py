@@ -6,8 +6,38 @@ from openai import OpenAI
 from datasets import load_dataset
 from tqdm import tqdm
 
+from collections import defaultdict
+from itertools import chain
+from operator import itemgetter as item
+
 from prompts import judge_cot_prompt, judge_extract_prompt
 
+
+def cons(x, xs):
+    return chain((x,), xs)
+
+
+def eager_groupby(xs, key=None):
+    d = defaultdict(list)
+    for x in xs:
+        d[x if key is None else key(x)].append(x)
+    return d
+
+
+def scores(tp, tn, fp, fn):
+    tpr = tp / (tp + fn) if tp + fn > 0 else 0
+    tnr = tn / (tn + fp) if tn + fp > 0 else 0
+    ppv = tp / (tp + fp) if tp + fp > 0 else 0
+    npv = tn / (tn + fn) if tn + fn > 0 else 0
+    f1 = (tp / (2*tp + fp + fn) if tp + fp + fn > 0 else 1/2) + (tn / (2*tn + fp + fn) if tn + fp + fn > 0 else 1/2)
+    return f1, tpr, tnr, ppv, npv
+
+
+def stats(matches):
+    # match == (y_true, y_pred)
+    aggs = eager_groupby(matches)
+    return (len(aggs[(True, True)]), len(aggs[(False, False)]), len(aggs[(False, True)]), len(aggs[(True, False)]))
+    
 
 def main():
     # Parse arguments
@@ -91,7 +121,11 @@ def main():
         judgments[item["uuid"]] = {
             "judge_cot": judge_cot,
             "extracted_judgment": extracted_judgment,
-            "extracted_judgment_binary": 1 if extracted_judgment_clean == "yes" else 0,
+            "extracted_judgment_binary": (
+                extracted_judgment_clean.endswith("yes")
+                if (extracted_judgment_clean.endswith("yes") or extracted_judgment_clean.endswith("no"))
+                else (not item["label"])
+            ),
             "correct_judgment_label": item["label"],
         }
 
@@ -100,9 +134,16 @@ def main():
         json.dump(judgments, f, indent=2)
     print(f"Judgments saved to {args.output_file} as uuid -> judgments JSON.")
 
-    # Print final accuracy of the judgments: total, per model split
-    # TODO: print scores
+    # Print final scores of the judgments: total, per-model split
+    jks, jvs = zip(*judgments.items())
+    models = [dataset[uuid]["model"] for uuid in jks]
+    matches = [(record["correct_judgment_label"], record["extracted_judgment_binary"]) for record in jvs]
+    splits, splitmatches = zip(*eager_groupby(zip(models, matches), key=item(0)).items())
 
+    print("scores: macro-F1 / TPR / TNR / PPV / NPV, %")
+    splitstats = [*map(stats, map(partial(map, item(1)), splitmatches))]
+    for s, st in zip(cons(None, splits), cons(map(sum, zip(*splitstats)), splitstats)):
+        print("mu-MATH" + (f" {s} " if s else " ") + "scores: " + " / ".join(f"{x*100:.1f}" for x in scores(*st)))
 
 
 if __name__ == "__main__":
