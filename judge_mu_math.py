@@ -8,8 +8,9 @@ from tqdm import tqdm
 
 from collections import defaultdict
 from itertools import chain
-from operator import itemgetter as item
+from operator import itemgetter
 
+from functools import partial
 from prompts import judge_cot_prompt, judge_extract_prompt
 
 
@@ -37,7 +38,7 @@ def stats(matches):
     # match == (y_true, y_pred)
     aggs = eager_groupby(matches)
     return (len(aggs[(True, True)]), len(aggs[(False, False)]), len(aggs[(False, True)]), len(aggs[(True, False)]))
-    
+
 
 def main():
     # Parse arguments
@@ -92,7 +93,7 @@ def main():
             model=args.model,
         )
         try:
-            judge_cot = judge_response.choices[0].message["content"]
+            judge_cot = judge_response.choices[0].message.content
         except:
             print(f"Error with UUID: {item['uuid']}")
             judge_cot = ""
@@ -106,7 +107,7 @@ def main():
             model=args.model,
         )
         try:
-            extracted_judgment = extract_response.choices[0].message["content"]
+            extracted_judgment = extract_response.choices[0].message.content
         except:
             print(f"Error with UUID: {item['uuid']}")
             extracted_judgment = ""
@@ -134,14 +135,17 @@ def main():
         json.dump(judgments, f, indent=2)
     print(f"Judgments saved to {args.output_file} as uuid -> judgments JSON.")
 
+    # convert dataset to dict: {uuid: item}
+    dataset_dict = {item["uuid"]: item for item in dataset}
+
     # Print final scores of the judgments: total, per-model split
     jks, jvs = zip(*judgments.items())
-    models = [dataset[uuid]["model"] for uuid in jks]
+    models = [dataset_dict[uuid]["model"] for uuid in jks]
     matches = [(record["correct_judgment_label"], record["extracted_judgment_binary"]) for record in jvs]
-    splits, splitmatches = zip(*eager_groupby(zip(models, matches), key=item(0)).items())
+    splits, splitmatches = zip(*eager_groupby(zip(models, matches), key=itemgetter(0)).items())
 
     print("scores: macro-F1 / TPR / TNR / PPV / NPV, %")
-    splitstats = [*map(stats, map(partial(map, item(1)), splitmatches))]
+    splitstats = [*map(stats, map(partial(map, itemgetter(1)), splitmatches))]
     for s, st in zip(cons(None, splits), cons(map(sum, zip(*splitstats)), splitstats)):
         print("mu-MATH" + (f" {s} " if s else " ") + "scores: " + " / ".join(f"{x*100:.1f}" for x in scores(*st)))
 

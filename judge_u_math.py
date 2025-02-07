@@ -75,7 +75,7 @@ def main():
             model=args.model,
         )
         try:
-            judge_cot = judge_response.choices[0].message["content"]
+            judge_cot = judge_response.choices[0].message.content
         except:
             print(f"Error with UUID: {item['uuid']}")
             judge_cot = ""
@@ -89,7 +89,7 @@ def main():
             model=args.model,
         )
         try:
-            extracted_judgment = extract_response.choices[0].message["content"]
+            extracted_judgment = extract_response.choices[0].message.content
         except:
             print(f"Error with UUID: {item['uuid']}")
             extracted_judgment = ""
@@ -117,11 +117,15 @@ def main():
         judgment["extracted_judgment_binary"] for judgment in judgments.values()
     ) / len(judgments)
     print(f"U-MATH accuracy: {u_math_accuracy*100:.1f}")
+
+    # convert dataset to dict: {uuid: item}
+    dataset_dict = {item["uuid"]: item for item in dataset}
+
     for subject in set(item["subject"] for item in dataset):
         subject_judgments = [
             judgment
             for uuid, judgment in judgments.items()
-            if dataset[uuid]["subject"] == subject
+            if dataset_dict[uuid]["subject"] == subject
         ]
         subject_accuracy = sum(
             judgment["extracted_judgment_binary"] for judgment in subject_judgments
@@ -131,7 +135,7 @@ def main():
         has_image_judgments = [
             judgment
             for uuid, judgment in judgments.items()
-            if dataset[uuid]["has_image"] == has_image
+            if dataset_dict[uuid]["has_image"] == has_image
         ]
         has_image_accuracy = sum(
             judgment["extracted_judgment_binary"] for judgment in has_image_judgments
