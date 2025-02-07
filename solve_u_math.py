@@ -58,7 +58,7 @@ def main():
             temperature=0.0,
             model=args.model,
         )
-        predictions[item["uuid"]] = response.choices[0].message
+        predictions[item["uuid"]] = response.choices[0].message.content
 
     # Save predictions to JSON file
     with open(args.output_file, "w") as f:

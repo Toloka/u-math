@@ -4,7 +4,7 @@ This repository contains the official evaluation code for the U-MATH and $\mu$-M
 
 ### Overview
 
-U-MATH provides a set of 1,100 university-level mathematical problems, while µ-MATH complements it with a meta-evaluation framework focusing on solution judgment with 1084 LLM solutions. 
+U-MATH provides a set of 1,100 university-level mathematical problems, while µ-MATH complements it with a meta-evaluation framework focusing on solution judgment with 1084 LLM solutions.
 
 * 📊 [U-MATH benchmark at Huggingface](https://huggingface.co/datasets/toloka/umath)
 * 🔎 [μ-MATH benchmark at Huggingface](https://huggingface.co/datasets/toloka/mumath)
@@ -70,7 +70,7 @@ python judge_u_math.py --base_url <BASE_URL> --api_key <YOUR_API_KEY> --model <M
 
 To evaluate the quality of LLM judgments for μ-MATH solutions, run the following command:
 ```shell
-python judge_u_math.py --base_url <BASE_URL> --api_key <YOUR_API_KEY> --model <MODEL_NAME> --output_file judgments_mu_math.json
+python judge_mu_math.py --base_url <BASE_URL> --api_key <YOUR_API_KEY> --model <MODEL_NAME> --output_file judgments_mu_math.json
 ```
 
 ### Licensing Information
