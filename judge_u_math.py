@@ -29,7 +29,7 @@ def main():
     parser.add_argument(
         "--model",
         type=str,
-        default="gpt-4o-mini",
+        default="o4-mini",
         help="Model name for OpenAI-compatible endpoint.",
     )
     parser.add_argument(
