@@ -11,7 +11,7 @@ from itertools import chain
 from operator import itemgetter
 
 from functools import partial
-from prompts import judge_cot_prompt, judge_extract_prompt
+from prompts import judge_cot_prompt, judge_extract_prompt, _REASONERS
 
 
 def cons(x, xs):
@@ -60,7 +60,7 @@ def main():
     parser.add_argument(
         "--model",
         type=str,
-        default="gpt-4o-mini",
+        default="o4-mini",
         help="Model name for OpenAI-compatible endpoint.",
     )
     parser.add_argument(
@@ -79,6 +79,10 @@ def main():
 
     # Judge the predictions using CoT and Extract prompts
     judgments = {}
+    params = (
+        {'temperature': 0., 'max_tokens': 4096} if args.model not in _REASONERS else 
+        {'reasoning_effort': 'high'}
+    )
     for item in tqdm(dataset):
         # Generate the judge CoT prompt
         judge_prompt = judge_cot_prompt(
@@ -88,9 +92,8 @@ def main():
         )
         judge_response = client.chat.completions.create(
             messages=judge_prompt,
-            max_tokens=4096,
-            temperature=0.0,
             model=args.model,
+            **params
         )
         try:
             judge_cot = judge_response.choices[0].message.content
@@ -102,9 +105,8 @@ def main():
         extract_prompt = judge_extract_prompt(generated_judgment=judge_cot)
         extract_response = client.chat.completions.create(
             messages=extract_prompt,
-            max_tokens=10,
-            temperature=0.0,
             model=args.model,
+            **{**params, **{'max_tokens': 10}}
         )
         try:
             extracted_judgment = extract_response.choices[0].message.content
