@@ -5,7 +5,7 @@ from openai import OpenAI
 from datasets import load_dataset
 from tqdm import tqdm
 
-from prompts import solve_cot_prompt
+from prompts import solve_cot_prompt, _REASONERS
 
 
 def main():
@@ -47,6 +47,10 @@ def main():
 
     # Predict with CoT prompt
     predictions = {}
+    params = (
+        {'temperature': 0., 'max_tokens': 4096} if args.model not in _REASONERS else 
+        {'reasoning_effort': 'high'}
+    )
     for item in tqdm(dataset):
         prompt = solve_cot_prompt(
             problem_statement=item["problem_statement"],
@@ -54,9 +58,8 @@ def main():
         )
         response = client.chat.completions.create(
             messages=prompt,
-            max_tokens=4096,
-            temperature=0.0,
             model=args.model,
+            **params
         )
         predictions[item["uuid"]] = response.choices[0].message.content
 
