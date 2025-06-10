@@ -1,5 +1,9 @@
 from typing import Any
 
+_REASONERS = [
+    'o1', 'o1-mini', 'o3', 'o3-mini', 'o4-mini'
+]
+
 
 def _get_openai_content_with_image(
     text: str,
