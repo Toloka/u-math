@@ -14,22 +14,22 @@ U-MATH provides a set of 1,100 university-level mathematical problems, while µ-
 ### U-MATH Evaluation Results
 
 <div align="center">
-  <img src="https://cdn-uploads.huggingface.co/production/uploads/650238063e61bc019201e3e2/beMyOikpKfp3My2vu5Mjc.png" alt="umath-table" width="800"/>
+  <img src="https://cdn-uploads.huggingface.co/production/uploads/6338929107f5708a1aca1390/oM5T6XAYTh1eR3UQA4bmj.png" alt="umath-table" width="800"/>
 </div>
 
 <div align="center">
-  <img src="https://cdn-uploads.huggingface.co/production/uploads/650238063e61bc019201e3e2/7_VZXidxMHG7PiDM983lS.png" alt="umath-bar" width="950"/>
+  <img src="https://cdn-uploads.huggingface.co/production/uploads/6338929107f5708a1aca1390/eG2Ydegz5xj6cYCrH_f8E.png" alt="umath-bar" width="800"/>
 </div>
 
 
 ### $\mu$-MATH Evaluation Results
 
 <div align="center">
-  <img src="https://cdn-uploads.huggingface.co/production/uploads/650238063e61bc019201e3e2/lz_ylYOUd6BSK8yFn3K77.png" alt="mumath-table" width="1000"/>
+  <img src="https://cdn-uploads.huggingface.co/production/uploads/6338929107f5708a1aca1390/yD6QF3so-ZcDCB6LYQUpw.png" alt="mumath-table" width="1000"/>
 </div>
 
 <div align="center">
-  <img src="https://cdn-uploads.huggingface.co/production/uploads/650238063e61bc019201e3e2/Ook-JXum03E0UdWBIW0qB.png" alt="mumath-scatter" width="800"/>
+  <img src="https://cdn-uploads.huggingface.co/production/uploads/6338929107f5708a1aca1390/Cjyj9IUOcr6KnQptI1Lj7.png" alt="mumath-scatter" width="800"/>
 </div>
 
 
